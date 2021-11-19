@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +8,8 @@ public class Arrow : Projectile
     [SerializeField] private float accuarcy;
     [SerializeField] private float criticalChance;
     [SerializeField] private float damageMultiplier;
-
+    [SerializeField] private ParticleSystem missingEffect;
+    [SerializeField] private ParticleSystem criticalEffect;
     private void FixedUpdate()
     {
         if (target) endPos = target.damagePoint.position;
@@ -42,11 +43,11 @@ public class Arrow : Projectile
             if (criticalRate < criticalChance)
             {
                 transformedDamage *= damageMultiplier;
-                UIController.current.CriticalMessage(target.Position);
+                Instantiate(criticalEffect, endPos,Quaternion.identity);
             }
             target.TakeDamage(transformedDamage, 0);
         }
-        else UIController.current.MissingMessage(target.Position);
+        else Instantiate(missingEffect, endPos, Quaternion.identity);
     }
     public void SetInitialParameters(Enemy targetValue, float damageValue, float accuarcyValue,float criticalChanceValue,float damageMultiplierValue)
     {
